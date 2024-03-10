@@ -1,0 +1,64 @@
+import System.Random
+
+-- Definimos el estado del juego
+data GameState = GameState {
+    playerX :: Float,
+    playerY :: Float,
+    squareX :: Float,
+    squareY :: Float,
+    gameOver :: Bool
+}
+
+-- Actualiza la posici�n del cuadrado
+updateSquare :: Float -> GameState -> GameState
+updateSquare _ gs@(GameState _ _ _ _ True) = gs
+updateSquare dt (GameState _ _ sx sy gameOver) =
+    let (dx, dy) = randomMove dt
+        newSX = sx + dx
+        newSY = sy + dy
+        gameOver' = checkCollision newSX newSY
+    in GameState 0 0 newSX newSY gameOver'
+
+-- Realiza un movimiento aleatorio para el cuadrado
+randomMove :: Float -> (Float, Float)
+randomMove dt = (dx, dy)
+    where
+        dx = 50 * dt * cos (pi / 4) -- velocidad en direcci�n X
+        dy = 50 * dt * sin (pi / 3) -- velocidad en direcci�n Y
+
+-- Comprueba si hay colisi�n entre el jugador y el cuadrado
+checkCollision :: Float -> Float -> Bool
+checkCollision sx sy = abs sx <= 20 && abs sy <= 20
+
+-- Maneja los eventos del teclado
+handleInput :: Char -> GameState -> GameState
+handleInput 'w' gs = gs { playerY = playerY gs + 10 }
+handleInput 's' gs = gs { playerY = playerY gs - 10 }
+handleInput 'a' gs = gs { playerX = playerX gs - 10 }
+handleInput 'd' gs = gs { playerX = playerX gs + 10 }
+handleInput _ gs = gs
+
+-- Actualiza el juego
+updateGame :: Float -> Char -> GameState -> GameState
+updateGame dt input gs =
+    let gs' = updateSquare dt gs
+    in handleInput input gs'
+
+-- Muestra el estado del juego
+render :: GameState -> String
+render (GameState px py sx sy gameOver) = 
+    "Player: (" ++ show px ++ ", " ++ show py ++ ")\n" ++
+    "Square: (" ++ show sx ++ ", " ++ show sy ++ ")\n" ++
+    if gameOver then "�Has ganado!" else ""
+
+-- Ejecuta el juego
+main :: IO ()
+main = gameLoop initialState
+    where
+        initialState = GameState 0 0 0 0 False
+        gameLoop gs = do
+            putStrLn $ render gs
+            putStrLn "Ingrese 'w' para arriba, 's' para abajo, 'a' para izquierda, 'd' para derecha:"
+            input <- getChar
+            let gs' = updateGame 0.1 input gs
+            if gameOver gs' then putStrLn "�Has ganado!" else gameLoop gs'
