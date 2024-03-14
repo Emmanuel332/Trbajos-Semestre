@@ -1,0 +1,36 @@
+import Data.List (intercalate)
+
+numeroEnPalabras :: Int -> String
+numeroEnPalabras n
+    | n == 0          = "cero"
+    | n < 20          = numerosEnPalabras !! n
+    | n < 100         = let (t, u) = divMod n 10 in if u == 0 then decenasEnPalabras !! t else decenasEnPalabras !! t ++ " y " ++ numerosEnPalabras !! u
+    | n < 1000        = let (c, r) = divMod n 100 in if r == 0 then numerosEnPalabras !! c ++ "cientos" else numerosEnPalabras !! c ++ "cientos " ++ numeroEnPalabras r
+    | n < 1000000     = let (m, r) = divMod n 1000 in if r == 0 then numeroEnPalabras m ++ " mil" else numeroEnPalabras m ++ " mil " ++ numeroEnPalabras r
+    | otherwise       = "Número fuera de rango"
+
+fizzBuzzOrPrimo :: Int -> String
+fizzBuzzOrPrimo n
+    | esPrimo n                   = "FizzBuzz!"
+    | n `mod` 3 == 0 && n `mod` 5 == 0 = "FizzBuzz!"
+    | n `mod` 3 == 0                   = "Fizz!"
+    | n `mod` 5 == 0                   = "Buzz!"
+    | otherwise                        = numeroEnPalabras n
+
+esPrimo :: Int -> Bool
+esPrimo n
+    | n <= 1    = False
+    | otherwise = not $ any (\x -> n `mod` x == 0) [2..floor (sqrt (fromIntegral n))]
+
+main :: IO ()
+main = do
+    putStrLn "Ingrese un número entre 0 y 1000000:"
+    input <- getLine
+    let number = read input :: Int
+    putStrLn $ fizzBuzzOrPrimo number
+
+numerosEnPalabras = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez",
+                     "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"]
+
+decenasEnPalabras = ["", "", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"]
+
