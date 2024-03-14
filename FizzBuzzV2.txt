@@ -1,4 +1,8 @@
 
+-- Importamos el módulo Data.List para usar la función intercalate
+import Data.List (intercalate)
+
+-- Función que convierte un número entero a su representación en palabras en español
 numeroEnPalabras :: Int -> String
 numeroEnPalabras n
     | n == 0          = "cero"
@@ -8,16 +12,19 @@ numeroEnPalabras n
     | n < 1000000     = let (m, r) = divMod n 1000 in if r == 0 then numeroEnPalabras m ++ " mil" else numeroEnPalabras m ++ " mil " ++ numeroEnPalabras r
     | otherwise       = "Número fuera de rango"
 
+-- Función que devuelve "FizzBuzz!" si el número es primo, de lo contrario, devuelve el número en palabras en español
 fizzBuzzOrNumeroEnPalabras :: Int -> String
 fizzBuzzOrNumeroEnPalabras n
     | esPrimo n                   = "FizzBuzz!"
     | otherwise                   = numeroEnPalabras n
 
+-- Función auxiliar que verifica si un número es primo
 esPrimo :: Int -> Bool
 esPrimo n
     | n <= 1    = False
     | otherwise = not $ any (\x -> n `mod` x == 0) [2..floor (sqrt (fromIntegral n))]
 
+-- Ejemplo de uso
 main :: IO ()
 main = do
     putStrLn "Ingrese un número entre 0 y 1000000:"
@@ -25,6 +32,7 @@ main = do
     let number = read input :: Int
     putStrLn $ fizzBuzzOrNumeroEnPalabras number
 
+-- Listas de palabras en español para números del 0 al 99
 numerosEnPalabras = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez",
                      "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"]
 
