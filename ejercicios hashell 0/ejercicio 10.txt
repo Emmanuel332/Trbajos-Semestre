@@ -1,0 +1,2 @@
+esPalindromo :: String -> Bool
+esPalindromo str = str == reverse str
