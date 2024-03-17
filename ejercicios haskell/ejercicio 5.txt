@@ -1,0 +1,13 @@
+type Vector = [Float]
+
+moduloVector :: Vector -> Float
+moduloVector = sqrt . sum . map (^2)
+
+-- Ejemplo de uso
+main :: IO ()
+main = do
+    let vector = [3, 4] -- Vector (3, 4)
+    putStrLn "Vector:"
+    print vector
+    putStrLn "Módulo del vector:"
+    print $ moduloVector vector

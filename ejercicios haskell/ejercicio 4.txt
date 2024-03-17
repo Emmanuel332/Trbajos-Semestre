@@ -1,0 +1,28 @@
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as Map
+
+type Asignatura = String
+type Nota = Float
+type Calificacion = String
+type RegistroNotas = Map Asignatura Nota
+type CalificacionesFinales = Map Asignatura Calificacion
+
+calificacionFinal :: RegistroNotas -> CalificacionesFinales
+calificacionFinal = Map.mapWithKey asignarCalificacion
+
+asignarCalificacion :: Asignatura -> Nota -> Calificacion
+asignarCalificacion _ nota
+    | nota >= 95 && nota <= 100 = "Excelente"
+    | nota >= 85 && nota <= 94 = "Notable"
+    | nota >= 75 && nota <= 84 = "Bueno"
+    | nota >= 70 && nota <= 74 = "Suficiente"
+    | otherwise = "Desempeño insuficiente"
+
+-- Ejemplo de uso
+main :: IO ()
+main = do
+    let notasAlumno = Map.fromList [("Matemáticas", 92), ("Física", 78), ("Química", 65)]
+    putStrLn "Notas del alumno:"
+    print notasAlumno
+    putStrLn "Calificaciones finales:"
+    print $ calificacionFinal notasAlumno

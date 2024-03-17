@@ -1,0 +1,24 @@
+import Data.Char (isAlpha, toLower)
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as Map
+
+type Frase = String
+type Diccionario = Map String Int
+
+limpiarPalabra :: String -> String
+limpiarPalabra = filter isAlpha . map toLower
+
+longitudPalabras :: Frase -> Diccionario
+longitudPalabras = contarPalabras . words
+  where
+    contarPalabras :: [String] -> Diccionario
+    contarPalabras = foldr (\word -> Map.insertWith (\_ old -> old) (limpiarPalabra word) (length . limpiarPalabra $ word)) Map.empty
+
+-- Ejemplo de uso
+main :: IO ()
+main = do
+    let frase = "Hola, esto es un ejemplo de frase para contar las palabras y su longitud."
+    putStrLn "Frase original:"
+    putStrLn frase
+    putStrLn "Diccionario de palabras y su longitud:"
+    print $ longitudPalabras frase

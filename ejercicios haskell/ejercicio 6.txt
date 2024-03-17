@@ -1,0 +1,32 @@
+import Data.List (sort)
+
+-- Calcula la media de una lista de números
+media :: [Float] -> Float
+media xs = sum xs / fromIntegral (length xs)
+
+-- Calcula la desviación estándar de una lista de números
+desviacionEstandar :: [Float] -> Float
+desviacionEstandar xs = sqrt $ sum (map (\x -> (x - m) ^ 2) xs) / fromIntegral n
+    where
+        m = media xs
+        n = length xs
+
+-- Calcula la puntuación típica de un valor en una muestra
+puntuacionTipica :: Float -> [Float] -> Float
+puntuacionTipica x muestra = (x - m) / s
+    where
+        m = media muestra
+        s = desviacionEstandar muestra
+
+-- Encuentra los valores atípicos en una muestra
+valoresAtipicos :: [Float] -> [Float]
+valoresAtipicos muestra = filter (\x -> abs (puntuacionTipica x muestra) > 3) muestra
+
+-- Ejemplo de uso
+main :: IO ()
+main = do
+    let muestra = [10, 12, 11, 9, 8, 40, 7, 10, 11, 13, 9]
+    putStrLn "Muestra de números:"
+    print muestra
+    putStrLn "Valores atípicos:"
+    print $ sort $ valoresAtipicos muestra

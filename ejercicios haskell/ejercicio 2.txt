@@ -1,0 +1,13 @@
+aplicarFuncion :: (a -> b) -> [a] -> [b]
+aplicarFuncion _ [] = []
+aplicarFuncion f (x:xs) = f x : aplicarFuncion f xs
+
+-- Ejemplo de uso
+main :: IO ()
+main = do
+    let listaEnteros = [1, 2, 3, 4, 5]
+    let funcionCuadrado = (^2)
+    putStrLn "Lista original:"
+    print listaEnteros
+    putStrLn "Aplicando la función cuadrado a cada elemento de la lista:"
+    print $ aplicarFuncion funcionCuadrado listaEnteros

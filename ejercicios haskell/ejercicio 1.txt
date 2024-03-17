@@ -1,0 +1,26 @@
+type Precio = Float
+type Porcentaje = Float
+type Producto = (String, Precio) -- Nombre del producto y su precio
+
+aplicarDescuento :: Precio -> Porcentaje -> Precio
+aplicarDescuento precio descuento = precio * (1 - descuento/100)
+
+aplicarIVA :: Precio -> Porcentaje -> Precio
+aplicarIVA precio iva = precio * (1 + iva/100)
+
+
+precioFinalCesta :: [(String, Precio)] -> (Precio -> Porcentaje -> Precio) -> Precio
+precioFinalCesta [] _ = 0
+precioFinalCesta ((_, precio):productos) funcion = funcion precio + precioFinalCesta productos funcion
+
+main :: IO ()
+main = do
+    let cesta = [("Producto 1", 100), ("Producto 2", 50), ("Producto 3", 75)]
+    let descuento = 10 -- 10% de descuento
+    let iva = 21 -- 21% de IVA
+
+    putStrLn "Precio final con descuento:"
+    print $ precioFinalCesta cesta (\precio -> aplicarDescuento precio descuento)
+
+    putStrLn "Precio final con IVA:"
+    print $ precioFinalCesta cesta (\precio -> aplicarIVA precio iva)
