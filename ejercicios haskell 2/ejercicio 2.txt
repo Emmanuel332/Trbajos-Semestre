@@ -1,0 +1,12 @@
+-- Función que filtra una lista según una función booleana
+filterByFunc :: (a -> Bool) -> [a] -> [a]
+filterByFunc _ [] = []  -- Caso base: lista vacía
+filterByFunc f (x:xs)
+    | f x       = x : filterByFunc f xs  -- Agrega x a la lista resultante si f x es True
+    | otherwise = filterByFunc f xs      -- Descarta x si f x es False
+
+-- Ejemplo de uso:
+-- Supongamos que queremos filtrar los números pares de una lista de enteros
+-- Utilizaremos la función filterByFunc con una función booleana que verifica si un número es par
+-- La llamada sería algo como: filterByFunc even [1, 2, 3, 4, 5, 6, 7, 8, 9]
+-- Esto nos devolvería la lista [2, 4, 6, 8]

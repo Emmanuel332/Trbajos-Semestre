@@ -1,0 +1,22 @@
+import qualified Data.Map as Map
+
+-- Función que convierte una calificación en una nota según la escala dada
+convertirNota :: Int -> String
+convertirNota calificacion
+    | calificacion >= 95 && calificacion <= 100 = "Excelente"
+    | calificacion >= 85 && calificacion <= 94  = "Notable"
+    | calificacion >= 75 && calificacion <= 84  = "Bueno"
+    | calificacion >= 70 && calificacion <= 74  = "Suficiente"
+    | otherwise                                 = "Desempeño insuficiente"
+
+-- Función que convierte un diccionario de asignaturas y calificaciones en otro diccionario
+-- con asignaturas en mayúsculas y las calificaciones aprobadas
+convertirCalificaciones :: Map.Map String Int -> Map.Map String String
+convertirCalificaciones = Map.mapKeys (map toUpper) . Map.map convertirNota
+
+-- Ejemplo de uso:
+-- Supongamos que tenemos un diccionario con las asignaturas y calificaciones de un alumno
+-- Llamamos a la función convertirCalificaciones con ese diccionario
+-- Esto devolverá otro diccionario con las asignaturas en mayúsculas y las calificaciones aprobadas
+-- convertirCalificaciones (Map.fromList [("Matemáticas", 92), ("Ciencias", 78), ("Historia", 60)])
+-- devolverá fromList [("MATEMÁTICAS","Notable"),("CIENCIAS","Bueno"),("HISTORIA","Desempeño insuficiente")]

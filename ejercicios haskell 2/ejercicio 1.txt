@@ -1,0 +1,50 @@
+import Text.Printf
+
+-- Funciones para calcular seno, coseno, tangente, exponencial y logaritmo neperiano
+sinus :: Floating a => a -> a
+sinus x = sin x
+
+cosinus :: Floating a => a -> a
+cosinus x = cos x
+
+tangent :: Floating a => a -> a
+tangent x = tan x
+
+exponential :: Floating a => a -> a
+exponential x = exp x
+
+naturalLog :: Floating a => a -> a
+naturalLog x = log x
+
+-- Función para imprimir la tabla con los resultados
+printTable :: (Floating a, PrintfArg a) => (a -> a) -> Int -> IO ()
+printTable func n = do
+    putStrLn "Entero\t\tResultado"
+    putStrLn "-----------------------"
+    mapM_ (\x -> printf "%d\t\t%.4f\n" x (func $ fromIntegral x)) [1..n]
+
+-- Función principal para calcular y mostrar la tabla
+scientificCalculator :: IO ()
+scientificCalculator = do
+    putStrLn "Bienvenido a la Calculadora Científica"
+    putStrLn "1. Seno"
+    putStrLn "2. Coseno"
+    putStrLn "3. Tangente"
+    putStrLn "4. Exponencial"
+    putStrLn "5. Logaritmo neperiano"
+    putStrLn "Seleccione la función a aplicar (1-5):"
+    choice <- getLine
+    putStrLn "Ingrese el valor hasta el cual aplicar la función:"
+    value <- getLine
+    let n = read value :: Int
+    case choice of
+        "1" -> printTable sinus n
+        "2" -> printTable cosinus n
+        "3" -> printTable tangent n
+        "4" -> printTable exponential n
+        "5" -> printTable naturalLog n
+        _   -> putStrLn "Opción inválida"
+
+-- Llamada a la función principal
+main :: IO ()
+main = scientificCalculator

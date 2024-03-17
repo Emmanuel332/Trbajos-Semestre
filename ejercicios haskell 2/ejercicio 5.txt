@@ -1,0 +1,49 @@
+import Data.Char (toUpper)
+
+-- Definición de un inmueble como un registro
+data Inmueble = Inmueble {
+    año :: Int,
+    metros :: Int,
+    habitaciones :: Int,
+    garaje :: Bool,
+    zona :: Char
+} deriving (Show)
+
+-- Función que calcula el precio de un inmueble según la zona y el año de construcción
+calcularPrecio :: Inmueble -> Float
+calcularPrecio inmueble =
+    let
+        precioBase = fromIntegral (metros inmueble) * 1000 +
+                     fromIntegral (habitaciones inmueble) * 5000 +
+                     if garaje inmueble then 15000 else 0
+        antiguedad = fromIntegral (2024 - año inmueble) / 100
+    in
+        case zona inmueble of
+            'A' -> precioBase * (1 - antiguedad)
+            'B' -> precioBase * (1 - antiguedad) * 1.5
+            _   -> 0.0
+
+-- Función que filtra los inmuebles según un presupuesto dado
+buscarInmuebles :: [Inmueble] -> Float -> [Inmueble]
+buscarInmuebles [] _ = []
+buscarInmuebles (x:xs) presupuesto =
+    let
+        precio = calcularPrecio x
+    in
+        if precio <= presupuesto
+            then x { precioInmueble = precio } : buscarInmuebles xs presupuesto
+            else buscarInmuebles xs presupuesto
+
+-- Ejemplo de uso
+main :: IO ()
+main = do
+    let inmuebles = [
+            Inmueble { año = 2000, metros = 100, habitaciones = 3, garaje = True, zona = 'A' },
+            Inmueble { año = 2012, metros = 60, habitaciones = 2, garaje = True, zona = 'B' },
+            Inmueble { año = 1980, metros = 120, habitaciones = 4, garaje = False, zona = 'A' },
+            Inmueble { año = 2005, metros = 75, habitaciones = 3, garaje = True, zona = 'B' },
+            Inmueble { año = 2015, metros = 90, habitaciones = 2, garaje = False, zona = 'A' }
+        ]
+        presupuesto = 100000.0
+        inmueblesDisponibles = buscarInmuebles inmuebles presupuesto
+    mapM_ print inmueblesDisponibles

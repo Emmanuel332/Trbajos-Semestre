@@ -1,0 +1,17 @@
+-- Función que convierte una calificación en una nota según la escala dada
+convertirNota :: Int -> String
+convertirNota calificacion
+    | calificacion >= 95 && calificacion <= 100 = "Excelente"
+    | calificacion >= 85 && calificacion <= 94  = "Notable"
+    | calificacion >= 75 && calificacion <= 84  = "Bueno"
+    | calificacion >= 70 && calificacion <= 74  = "Suficiente"
+    | otherwise                                 = "Desempeño insuficiente"
+
+-- Función que aplica convertirNota a cada elemento de la lista de calificaciones
+convertirCalificaciones :: [Int] -> [String]
+convertirCalificaciones = map convertirNota
+
+-- Ejemplo de uso:
+-- Supongamos que tenemos una lista de calificaciones
+-- Llamamos a la función convertirCalificaciones con esa lista
+-- convertirCalificaciones [98, 80, 72, 65, 88] devolverá ["Excelente","Bueno","Suficiente","Desempeño insuficiente","Notable"]
